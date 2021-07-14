@@ -1,0 +1,23 @@
+Description:
+
+Hardware:
+1) deska
+2) Rele
+3) Dispaly
+
+Variables:
+1) čas spínání
+2) na jak dlouho se to má spínat
+3) manuální zapnout a vipnout
+
+Fix times:
+1) 3 intervaly
+    - Ráno
+    - přes Den
+    - na noc
+
+    NAstavení:
+        Čas OD
+        ČAs DO
+        intervaly
+        Průtok t
