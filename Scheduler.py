@@ -1,4 +1,4 @@
-def schedule_Cerpadlo(DB_SET):
+def Schedule_Cerpadlo(DB_SET, display):
     def Time_dif(H_From, M_From, H_To, M_To):
         import utime
         Time_From = utime.mktime([2020, 1, 1, 0, H_From, M_From, 0, 0])
@@ -51,7 +51,7 @@ def schedule_Cerpadlo(DB_SET):
         Z2_T_From_M = int(DB_SET[str(7)].decode('utf-8'))
         Z2_T_To_H = int(DB_SET[str(8)].decode('utf-8'))
         Z2_T_To_M = int(DB_SET[str(9)].decode('utf-8'))
-        Cerpadlo_Process = int(DB_SET[str(5)].decode('utf-8'))*60    # [seconds]
+        Cerpadlo_Process = int(DB_SET[str(11)].decode('utf-8'))*60    # [seconds]
         Page = int(DB_SET[str(30)].decode('utf-8'))
         DB_SET.close()
         f_SET.close()
@@ -82,7 +82,7 @@ def schedule_Cerpadlo(DB_SET):
         Z3_T_From_M = int(DB_SET[str(13)].decode('utf-8'))
         Z3_T_To_H = int(DB_SET[str(14)].decode('utf-8'))
         Z3_T_To_M = int(DB_SET[str(15)].decode('utf-8'))
-        Cerpadlo_Process = int(DB_SET[str(5)].decode('utf-8'))*60    # [seconds]
+        Cerpadlo_Process = int(DB_SET[str(17)].decode('utf-8'))*60    # [seconds]
         Page = int(DB_SET[str(30)].decode('utf-8'))
         DB_SET.close()
         f_SET.close()
@@ -100,68 +100,6 @@ def schedule_Cerpadlo(DB_SET):
             print("Evening - Off")
             Cerpadlo.off()
 
-    import machine
-    tim0 = machine.Timer(0) # Morning
-    tim1 = machine.Timer(1) # Day
-    tim2 = machine.Timer(2) # Evening
-    try:
-        tim0.deinit()
-        tim1.deinit()
-        tim2.deinit()
-    except:
-        pass
-
-    #-------------Morning-------------#
-    # Set schedule timer in miliseconds
-    Z1_T_From_H = int(DB_SET[str(0)].decode('utf-8'))
-    Z1_T_From_M = int(DB_SET[str(1)].decode('utf-8'))
-    Z1_T_To_H = int(DB_SET[str(2)].decode('utf-8'))
-    Z1_T_To_M = int(DB_SET[str(3)].decode('utf-8'))
-    Z1_Cerpadlo_Count = int(DB_SET[str(4)].decode('utf-8'))
-
-    Differnece_M = Time_dif(Z1_T_From_H, Z1_T_From_M, Z1_T_To_H, Z1_T_To_M)
-    SCHED_TIME0 = round(Differnece_M / Z1_Cerpadlo_Count)    # [mili-seconds]
-
-    #Timer
-    tim0 = machine.Timer(0)
-    tim0.init(mode=machine.Timer.PERIODIC, period=SCHED_TIME0, callback=Morning_Period)
-    print("Morning Cerpadlo Timer Setuped")
-
-    #-------------Day-------------#
-    # Set schedule timer in miliseconds
-    Z2_T_From_H = int(DB_SET[str(6)].decode('utf-8'))
-    Z2_T_From_M = int(DB_SET[str(7)].decode('utf-8'))
-    Z2_T_To_H = int(DB_SET[str(8)].decode('utf-8'))
-    Z2_T_To_M = int(DB_SET[str(9)].decode('utf-8'))
-    Z2_Cerpadlo_Count = int(DB_SET[str(10)].decode('utf-8'))
-
-    Differnece_D = Time_dif(Z2_T_From_H, Z2_T_From_M, Z2_T_To_H, Z2_T_To_M)
-    SCHED_TIME1 = round(Differnece_D / Z2_Cerpadlo_Count)    # [mili-seconds]
-
-    #Timer
-    tim1 = machine.Timer(1)
-    tim1.init(mode=machine.Timer.PERIODIC, period=SCHED_TIME1, callback=Day_Period)
-    print("Day Cerpadlo Timer Setuped")
-
-    #-------------Evening-------------#
-    # Set schedule timer in miliseconds
-    Z3_T_From_H = int(DB_SET[str(12)].decode('utf-8'))
-    Z3_T_From_M = int(DB_SET[str(13)].decode('utf-8'))
-    Z3_T_To_H = int(DB_SET[str(14)].decode('utf-8'))
-    Z3_T_To_M = int(DB_SET[str(15)].decode('utf-8'))
-    Z3_Cerpadlo_Count = int(DB_SET[str(16)].decode('utf-8'))
-
-    Differnece_E = Time_dif(Z3_T_From_H, Z3_T_From_M, Z3_T_To_H, Z3_T_To_M)
-    SCHED_TIME2 = round(Differnece_E / Z3_Cerpadlo_Count)    # [mili-seconds]
-
-    #Timer
-    tim2 = machine.Timer(2)
-    tim2.init(mode=machine.Timer.PERIODIC, period=SCHED_TIME2, callback=Evening_Period)
-    print("Evening Cerpadlo Timer Setuped")
-    machine.reset()
-
-
-def schedule_filtr(DB_SET, display):
     def Filter_Period(pin):
         import utime
         import machine
@@ -186,18 +124,71 @@ def schedule_filtr(DB_SET, display):
             display.fill_rectangle(0, 0, 10, 149, 0xf7be)
             Font1.text("Ready", 1, 1, 1, 1)
             Font1.deinit()
-
         print("Filter Timer - process")
 
-    print("Getting Timer for Filter Starts")
-    
     import machine
-    tim3 = machine.Timer(4)
+    tim0 = machine.Timer(0) # Morning
+    tim1 = machine.Timer(1) # Day
+    tim2 = machine.Timer(2) # Evening
+    tim3 = machine.Timer(4) # Filter
     try:
+        tim0.deinit()
+        tim1.deinit()
+        tim2.deinit()
         tim3.deinit()
     except:
         pass
-    
+
+    #-------------Cerpadlo - Morning-------------#
+    # Set schedule timer in miliseconds
+    Z1_T_From_H = int(DB_SET[str(0)].decode('utf-8'))
+    Z1_T_From_M = int(DB_SET[str(1)].decode('utf-8'))
+    Z1_T_To_H = int(DB_SET[str(2)].decode('utf-8'))
+    Z1_T_To_M = int(DB_SET[str(3)].decode('utf-8'))
+    Z1_Cerpadlo_Count = int(DB_SET[str(4)].decode('utf-8'))
+
+    Differnece_M = Time_dif(Z1_T_From_H, Z1_T_From_M, Z1_T_To_H, Z1_T_To_M)
+    SCHED_TIME0 = round(Differnece_M / Z1_Cerpadlo_Count)    # [mili-seconds]
+
+    #Timer
+    tim0 = machine.Timer(0)
+    tim0.init(mode=machine.Timer.PERIODIC, period=SCHED_TIME0, callback=Morning_Period)
+    print("Morning Cerpadlo Timer Setuped")
+
+    #-------------Cerpadlo - Day-------------#
+    # Set schedule timer in miliseconds
+    Z2_T_From_H = int(DB_SET[str(6)].decode('utf-8'))
+    Z2_T_From_M = int(DB_SET[str(7)].decode('utf-8'))
+    Z2_T_To_H = int(DB_SET[str(8)].decode('utf-8'))
+    Z2_T_To_M = int(DB_SET[str(9)].decode('utf-8'))
+    Z2_Cerpadlo_Count = int(DB_SET[str(10)].decode('utf-8'))
+
+    Differnece_D = Time_dif(Z2_T_From_H, Z2_T_From_M, Z2_T_To_H, Z2_T_To_M)
+    SCHED_TIME1 = round(Differnece_D / Z2_Cerpadlo_Count)    # [mili-seconds]
+
+    #Timer
+    tim1 = machine.Timer(1)
+    tim1.init(mode=machine.Timer.PERIODIC, period=SCHED_TIME1, callback=Day_Period)
+    print("Day Cerpadlo Timer Setuped")
+
+    #-------------Cerpadlo - Evening-------------#
+    # Set schedule timer in miliseconds
+    Z3_T_From_H = int(DB_SET[str(12)].decode('utf-8'))
+    Z3_T_From_M = int(DB_SET[str(13)].decode('utf-8'))
+    Z3_T_To_H = int(DB_SET[str(14)].decode('utf-8'))
+    Z3_T_To_M = int(DB_SET[str(15)].decode('utf-8'))
+    Z3_Cerpadlo_Count = int(DB_SET[str(16)].decode('utf-8'))
+
+    Differnece_E = Time_dif(Z3_T_From_H, Z3_T_From_M, Z3_T_To_H, Z3_T_To_M)
+    SCHED_TIME2 = round(Differnece_E / Z3_Cerpadlo_Count)    # [mili-seconds]
+
+    #Timer
+    tim2 = machine.Timer(2)
+    tim2.init(mode=machine.Timer.PERIODIC, period=SCHED_TIME2, callback=Evening_Period)
+    print("Evening Cerpadlo Timer Setuped")
+    machine.reset()
+
+    #-------------Filter-------------#
     # Count function how many times run / day
     Filtr_Count = int(DB_SET[str(40)].decode('utf-8'))
     SCHED_TIME3 = round(24 / Filtr_Count * 60 * 60 * 1000)    # [mili-seconds]

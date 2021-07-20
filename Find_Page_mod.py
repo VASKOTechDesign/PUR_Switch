@@ -56,10 +56,10 @@ def _1_Find_Page(coordinates, display):
             DB_SET[str(18)] = "1"
             DB_SET.flush()
 
-            import Scheduler
-            Scheduler.schedule_Cerpadlo(DB_SET)
-
             display.fill_rectangle(56, 261, 4, 59, 0x7fc0)
+
+            import Scheduler
+            Scheduler.Schedule_Cerpadlo(DB_SET, display)
         #-----------Morning-----------#
         # + Time_From
         if ((354 < coordinates[0] < 693)and(3181 < coordinates[1] < 3711)):
@@ -164,9 +164,7 @@ def _1_Find_Page(coordinates, display):
             Cerpadlo.off()
             Filtrace.off()
 
-            import Scheduler
-            Scheduler.schedule_filtr(DB_SET,display)
-
+            DB_SET[str(18)] = "0"  
             DB_SET[str(30)] = "1"
             DB_SET.flush()
             gc.collect()

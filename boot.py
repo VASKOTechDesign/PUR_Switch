@@ -12,7 +12,7 @@ try:
     f_SET = open("Database/Settings.db", "r+b")
     DB_SET = btree.open(f_SET)
     DB_SET[str(30)] = "1"   # Actual Display - in case of electry emergency turn Off to set it again as homescreen is first
-    DB_SET[str(42)] = "0"   # Filtr - Enabled / not enabled
+    DB_SET[str(18)] = "0"   # Cerpadlo + Filtr - Enabled / not enabled 
     DB_SET.flush()
     DB_SET.close()
 except:
@@ -40,11 +40,11 @@ except:
     DB_SET[str(16)] = "3"     # Zona3 - Count
     DB_SET[str(17)] = "2"     # Zona3 - Process time
 
-    DB_SET[str(18)] = "0"     # Cerpadlo Scheduled ON/OFF
+    DB_SET[str(18)] = "0"     # Cerpadlo + filter Scheduled ON/OFF
 
     DB_SET[str(21)] = "2021"    # RTC - Year
-    DB_SET[str(22)] = "06"      # RTC - Month
-    DB_SET[str(23)] = "21"      # RTC - Day
+    DB_SET[str(22)] = "07"      # RTC - Month
+    DB_SET[str(23)] = "16"      # RTC - Day
     DB_SET[str(24)] = "08"      # RTC - Hour
     DB_SET[str(25)] = "00"      # RTC - Minute
     DB_SET[str(26)] = "2"       # RTC - Week Day
@@ -54,7 +54,6 @@ except:
 
     DB_SET[str(40)] = "4"   # Filter - per/Day
     DB_SET[str(41)] = "5"   # Filtr - Process Time
-    DB_SET[str(42)] = "0"   # Filtr - Enabled
 
     DB_SET[str(50)] = "10000"   # Schedule - Cerpadlo [mili-seconds]
     DB_SET[str(51)] = "10000"   # Schedule - Filtrace [mili-seconds]
